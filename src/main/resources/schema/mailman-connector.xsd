@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://gwdg.de/mailman-connector" xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:ino="http://gwdg.de/mailman-connector"
+        xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+        xmlns:dc="urn:mace:shibboleth:2.0:resolver:dc"
+        elementFormDefault="qualified">
+
+    <import namespace="urn:mace:shibboleth:2.0:resolver"
+        schemaLocation="classpath:/schema/shibboleth-2.0-attribute-resolver.xsd" />
+
+    <import namespace="urn:mace:shibboleth:2.0:resolver:dc"
+        schemaLocation="classpath:/schema/shibboleth-2.0-attribute-resolver-dc.xsd" />
+
+    <annotation>
+        <documentation>
+            This schema specifies the configuration additions for mailman connector plugin
+        </documentation>
+    </annotation>
+
+    <complexType name="MailmanDataConnector">
+        <annotation>
+            <documentation>
+               A data connector that pull information from an mailman database.
+            </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="resolver:BaseDataConnectorType">
+                <sequence>
+<!--                     <element ref="ino:mailmanHost" minOccurs="1" maxOccurs="1" /> -->
+                    <element name="QueryTemplate" type="string" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>
+                                A template used to construct a query to the mailman.
+                            </documentation>
+                        </annotation>
+                    </element>
+                    <element ref="ino:AttributeMap" minOccurs="0" maxOccurs="unbounded" />
+                </sequence>
+                <attribute name="mailmanHost" type="string" use="required">
+                    <annotation>
+                        <documentation>
+                            The host of the mailman server
+                        </documentation>
+                    </annotation>
+                </attribute>
+                <attribute name="mailmanPort" type="int" use="required">
+                    <annotation>
+                        <documentation>
+                            The port of the mailman server
+                        </documentation>
+                    </annotation>
+                </attribute>
+                <attribute name="username" type="string">
+                    <annotation>
+                        <documentation>
+                            The username to use when connecting to the mailman server.
+                        </documentation>
+                    </annotation>
+                </attribute>
+                <attribute name="password" type="string">
+                    <annotation>
+                        <documentation>
+                            The password to use when connecting to the mailman server.
+                        </documentation>
+                    </annotation>
+                </attribute>
+
+                <attribute name="templateEngine" type="string" fixed="shibboleth.TemplateEngine">
+                    <annotation>
+                        <documentation>Name of the template engine defined within the application.</documentation>
+                    </annotation>
+                </attribute>
+            </extension>
+        </complexContent>
+    </complexType>
+    <element name="AttributeMap" type="ino:AttributeMapType">
+        <annotation>
+            <documentation>A description of a mailman attribute in the result set from the query.</documentation>
+        </annotation>
+    </element>
+    <complexType name="AttributeMapType">
+        <attribute name="mailmanKey" type="string" use="required">
+            <annotation>
+                <documentation>The name of the attribute key.</documentation>
+            </annotation>
+        </attribute>
+        <attribute name="attributeID" type="string">
+            <annotation>
+                <documentation>The name of the attribute that data from this column should be added to.</documentation>
+            </annotation>
+        </attribute>
+    </complexType>
+</schema>
